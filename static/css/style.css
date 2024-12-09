@@ -1,0 +1,141 @@
+body {
+    background-color: #f9f9fa;
+}
+.banner {
+    margin: 0 -100px 0 -100px;
+    width: 1500px;
+    height: 500px;
+    background-image: url('../img/banner.jpeg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+img {
+    height: 225px;
+    object-fit: cover;
+}
+
+table {
+    display: table;
+    font-size: 12px;
+}
+
+table td, table th {
+    text-align: center;
+    vertical-align: center;
+}
+
+td img {
+    width: 100px;
+    height: 50px;
+    object-fit:fill;
+}
+  
+table tr:hover {
+    background-color: #ddd;
+}
+
+.py-5 {
+    padding: 0;
+}
+
+.btn-delete:hover {
+    background-color: red;
+    color: #fff;
+}
+
+.btn-submit:hover {
+    background-color: red;
+    color: #fff;
+}
+
+.order-btn-container {
+    width: 100%;
+}
+
+.order-btn {
+    display: flex;
+    margin-left: auto;
+}
+
+.card-name {
+    margin-bottom: 3px;
+    line-height: normal;
+}
+
+.card-price {
+    font-style: italic;
+    font-size: 20px;
+    color: #6c757d;
+}
+
+.hidden {
+    display: none;
+}
+
+.nav-item {
+    margin-bottom: 0;
+    text-align: center;
+}
+
+
+input[type="checkbox"].ios8-switch {
+    position: absolute;
+    margin: 10px 0 0 16px;    
+}
+input[type="checkbox"].ios8-switch + label {
+    position: relative;
+    padding: 0px 0 0 50px;
+    line-height: 2.0em;
+}
+input[type="checkbox"].ios8-switch + label:before {
+    content: "";
+    position: absolute;
+    display: block;
+    left: 0;
+    top: 5px;
+    width: 40px; /* x*5 */
+    height: 24px; /* x*3 */
+    border-radius: 16px; /* x*2 */
+    background: #f4f4f4;
+    border: 1px solid #d9d9d9;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+input[type="checkbox"].ios8-switch + label:after {
+    content: "";
+    position: absolute;
+    display: block;
+    left: 0px;
+    top: 5px;
+    width: 24px; /* x*3 */
+    height: 24px; /* x*3 */
+    border-radius: 16px; /* x*2 */
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+input[type="checkbox"].ios8-switch + label:hover:after {
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+input[type="checkbox"].ios8-switch:checked + label:after {
+    margin-left: 16px;
+}
+input[type="checkbox"].ios8-switch:checked + label:before {
+    background: #55D069;
+}
+
+form {
+    margin-bottom: 10px;
+}
+
+form label {
+    font-size: 20px;
+}
+
+.message {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+}

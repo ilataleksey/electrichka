@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Электричка</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <link rel="stylesheet" href="../static/css/bootstrap-grid.css">
+    <link rel="stylesheet" href="../static/css/bootstrap-reboot.css">
+    <link rel="stylesheet" href="../static/css/bootstrap-utilities.css">
+    <link rel="stylesheet" href="../static/css/sign-in.css">
+
+    <script src="../static/script/bootstrap.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+      function addToCart(carId, userId) {
+        
+        $.ajax({
+          type: 'POST',
+          url: 'add_to_cart',
+          data: 'id_car=' + carId + '&id_user=' + userId,
+          success: function(){}
+        });
+      }
+    </script>
+
+    <script>
+      function updateCount(carCount, carId, userId, carPrice) {
+        const DATA = `id_car=${carId}&id_user=${userId}&car_count=${carCount}`;
+        
+        $.ajax({
+          type: 'POST',
+          url: 'update_count',
+          data: DATA,
+          success: function(){
+            // пересчитать стоимость авто после измненения количества
+            oldCarTotal = $(`.${carId} .car-total`).text()
+
+            carPrice = parseFloat(`${carPrice}`.replace(/ /g,''))
+            newCarTotal = carCount * carPrice
+
+            carTotalSelector = $(`.${carId} .car-total`)
+            carTotalSelector.text(`${newCarTotal}`)
+
+            // пересчитать итого по всем машинам
+            totalSelector = $(`.text-total-price`)
+            total = parseFloat(totalSelector.text())
+            newTotal = total - oldCarTotal + newCarTotal
+            totalSelector.text(`${newTotal}`)      
+          }
+        });
+      }
+    </script>
+
+    <script>
+      function deleteFromCart(carId, userId) {
+        const DATA = `id_car=${carId}&id_user=${userId}`;
+        
+        $.ajax({
+          type: 'POST',
+          url: `delete_from_cart`,
+          data: DATA,
+          success: function(){
+            oldCarTotal = $(`.${carId} .car-total`).text()
+
+            totalSelector = $(`.text-total-price`)
+            total = parseFloat(totalSelector.text())
+            newTotal = total - oldCarTotal
+            totalSelector.text(`${newTotal}`)
+
+            $(`.${carId}`).remove()
+          }
+        });
+      }
+    </script>
+
+    <script>
+      function makeOrder(userId, carList, total) {
+        const DATA = `id_user=${userId}&car_list=${carList}&total=${total}`;
+        
+        if (userId == 'None') {
+          window.location.href = 'login?make_order';
+        } else {
+          $.ajax({
+            type: 'POST',
+            url: `make_order`,
+            data: DATA,
+            success: function(){
+              $(`.table`).remove()
+              $(`.order-btn-container`).remove()
+              $('main').append('<div>Заказ отправлен. Наш менеджер свяжется с Вами для подтверждения</div>');
+              }
+          });
+        }
+      }
+    </script>
+
+    <script>
+      $(document).ready(function() {
+        if(window.location.search == '?make_order') {
+          $(`.login-text`).text(`Авторизуйтесь для заказа`);
+        }
+      })
+    </script>
+
+
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    {% block nav %}
+    <nav class="py-2 border-bottom">
+        <div class="container d-flex flex-wrap">
+          <ul class="nav me-auto">
+            {% block links %}{% endblock %}
+          </ul>
+          <ul class="nav">
+            {% block user %}
+              {% if id_user %}
+                  <li class="nav-item"><a href="/logout" class="nav-link link-body-emphasis px-2 active">Выйти</a></li>
+              {% else %}
+                  <li class="nav-item"><a href="/login" class="nav-link link-body-emphasis px-2 active">Войти</a></li>
+              {% endif %}
+            {% endblock %}
+          </ul>
+        </div>
+    </nav>
+    {% endblock %}
+
+
+    {% block header %}
+    <header class="py-3 mb-4 border-bottom">
+        <div class="container d-flex flex-wrap justify-content-center">
+          <a href="/" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+            <span class="fs-4">{% block pagename %}Шаблон{% endblock %}</span>
+          </a>
+          <form class="col-12 col-lg-auto mb-3 mb-lg-0" role="search">
+            <input type="search" class="form-control" placeholder="Search..." aria-label="Search" disabled>
+          </form>
+        </div>
+    </header>
+    {% endblock %}
+
+
+    <main class="container d-flex flex-wrap fs-4">
+        {% block main %}
+        {% endblock%}    
+    </main>
+
+
+    {% block footer %}
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="col-md-4 d-flex align-items-center">
+            <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+            </a>
+            <span class="mb-3 mb-md-0 text-body-secondary">© 2024 Company, Inc</span>
+            </div>
+
+            <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+            <li class="ms-3">
+                <a class="text-body-secondary" href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
+                        <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/>
+                    </svg>
+                </a>
+            </li>
+            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#instagram"></use></svg></a></li>
+            <li class="ms-3"><a class="text-body-secondary" href="#"><svg class="bi" width="24" height="24"><use xlink:href="#facebook"></use></svg></a></li>
+            </ul>
+        </footer>
+    </div>
+    {% endblock%}
+</body>
+</html>

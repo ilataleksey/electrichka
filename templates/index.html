@@ -1,0 +1,36 @@
+{% extends "main_template.html" %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+
+{% block nav %}
+  {{ super() }}
+{% endblock %}
+{% block links %}
+    <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2 active" aria-current="page">Главная</a></li>
+    <li class="nav-item"><a href="/catalog" class="nav-link link-body-emphasis px-2">Каталог</a></li>
+    <li class="nav-item"><a href="/contacts" class="nav-link link-body-emphasis px-2">Контакты</a></li>
+{% endblock%}
+{% block user %}
+  {{ super() }}
+  <li class="nav-item"><a href="/cart" class="nav-link link-body-emphasis px-2 active">Корзина</a></li>
+{% endblock %}
+
+
+{% block pagename %}Магазин электромобилей - Электричка{% endblock %}
+
+{% block header %}{{ super() }}{% endblock %}
+
+
+{% block main %}
+  <p>На этом сайте представлены популярные электромобили, которые Вы можете приобрести у нас по разумным ценам!</p>
+  <div class="banner"></div>
+  <p>Для отображения каталога товаров перейди на вкладку <span style="font-weight: bold;">Каталог</span> в шапке страницы</p>
+{% endblock %}
+
+
+{% block footer %}
+  {{ super() }}
+{% endblock %}

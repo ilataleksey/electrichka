@@ -1,0 +1,96 @@
+{% extends "main_template.html" %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+
+{% block nav %}
+  {{ super() }}
+{% endblock %}
+{% block links %}
+  <li class="nav-item"><a href="/" class="nav-link link-body-emphasis px-2">Главная</a></li>
+  <li class="nav-item"><a href="/catalog" class="nav-link link-body-emphasis px-2" aria-current="page">Каталог</a></li>
+  <li class="nav-item"><a href="/contacts" class="nav-link link-body-emphasis px-2">Контакты</a></li>
+{% endblock%}
+{% block user %}
+  {{ super() }}
+  <li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2 active">Корзина</a></li>
+{% endblock %}
+
+{% block pagename %}Корзина товаров{% endblock %}
+
+{% block header %}{{ super() }}{% endblock %}
+
+
+{% block main %}
+  {% if not car_list %}
+    <div>Пусто - перейдите в каталог товаров для наполнение корзины</div>
+  {% else %}
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Изображение</th>
+          <th scope="col">Название</th>
+          <th scope="col">Цена</th>
+          <th scope="col">Количество</th>
+          <th scope="col">Стоимость</th>
+          <th scope="col">Управление</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% set total = namespace(a=0) %}
+          {% for car in car_list %}
+          <tr class="{{ car.id }}">
+            <td class="td-index">
+              {{ loop.index }}
+            </td>
+            <td class="td-img">
+              <img class="bd-placeholder-img" src="{{ url_for('static', filename='img/' + car.img)}}" alt="{{car.title}}"></img>
+            </td>
+            <td class="td-title">
+              {{ car.title }}
+            </td>
+            <td class="td-price">
+              <span>₽ </span><span class="car-price">{{ car.price }}</span>
+            </td>
+            <td class="td-count">
+              <input style="width: 50px" type="number" min="1" value="{{ car.car_count }}" onchange="updateCount(this.value, '{{ car.id }}', '{{ id_user }}', '{{ car.price }}')">
+            </td>
+            {% set price = (car.price | replace(" ","")) | int %}
+            {% set count = car.car_count | int %}
+            {% set total_car = price * count %}
+            <td class="td-car-total">
+              <span>₽ </span><span class="car-total">{{ total_car }}</span>
+            </td>
+            <td>
+              <button class="btn btn-danger" type="button" onclick="deleteFromCart(`{{ car.id }}`, `{{ id_user }}`)">X</button>
+            </td>
+          </tr>
+          {% set total.a = total.a + total_car %}
+          {% endfor %}
+          <tr>
+            <td></td>
+            <td></td>
+            <td><strong>Итого</strong></td>
+            <td></td>
+            <td></td>
+            <td class="td-total">
+              <strong><span>₽ </span><span class="text-total-price">{{ total.a }}</span></strong>
+            </td>
+            <td></td>
+          </tr>
+      </tbody>
+    </table>
+    <div class="order-btn-container">
+      <button class="btn btn-success order-btn" onclick="makeOrder(`{{ id_user }}`, `{{ car_list }}`, `{{ total.a }}`)">Сделать заказ</button>
+    </div>
+    
+  {% endif %}
+{% endblock %}
+
+
+{% block footer %}
+  {{ super() }}
+{% endblock %}
